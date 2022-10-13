@@ -1,52 +1,64 @@
-import {useMemo, useState} from "react";
+import {useMemo, useState} from 'react';
 
 interface Item {
   id: number;
   name: string;
   price: number;
   count: number;
-  status: "wish" | "bought" | "cancelled";
+  status: 'wish' | 'bought' | 'cancelled';
 }
 
-// let key = 1;
+let key = 1;
 
 function App() {
   const [items, setItems] = useState<Item[]>([
     {
       id: 0,
-      name: "Cámara digital",
+      name: 'Cámara digital',
       price: 100,
       count: 1,
-      status: "wish",
+      status: 'wish',
     },
   ]);
+
   const total = useMemo(() => {
-    // @TODO: Should implement
-    return 0;
+    // TODO: Should implement
+    return items.reduce((acc, item) => {
+      return acc + item.price * item.count;
+    }, 0);
   }, [items]);
+
   const isValid = useMemo(() => {
-    // @TODO: Should implement
-    return true;
+    // TODO: Should implement
+    return !items.some((item) => {
+      return !item.name || !item.status || item.count <= 0 || item.price <= 0;
+    });
   }, [items]);
 
   function handleAdd() {
+    // TODO: Should implement
     setItems((items) => {
-      // @TODO: Should implement
-      return items;
+      return items.concat({
+        id: ++key,
+        name: '',
+        price: 0,
+        count: 1,
+        status: 'wish',
+      });
     });
   }
 
   function handleEdit(item: Item) {
+    // TODO: Should implement
     setItems((items) => {
-      // @TODO: Should implement
-      return items;
+      return items.map((_item) => (_item.id === item.id ? item : _item));
     });
   }
 
   function handleRemove(item: Item) {
+    // TODO: Should implement
     setItems((items) => {
-      // @TODO: Should implement
-      return items;
+      return items.filter((_item) => _item.id !== item.id);
     });
   }
 
@@ -73,7 +85,10 @@ function App() {
             <select
               value={item.status}
               onChange={(event) =>
-                handleEdit({...item, status: event.target.value as Item["status"]})
+                handleEdit({
+                  ...item,
+                  status: event.target.value as Item['status'],
+                })
               }
             >
               <option value="wish">Wish</option>
@@ -85,7 +100,7 @@ function App() {
         ))}
       </ul>
       <button onClick={handleAdd}>Add item</button>
-      <p>Are items valid?: {isValid ? "✅" : "⛔"}</p>
+      <p>Are items valid?: {isValid ? '✅' : '⛔'}</p>
       <p>Total: ${total}</p>
     </main>
   );
